@@ -25,9 +25,18 @@ router.get('/login', async (req, res)=>{
        login: req.body.login,
        password: req.body.password
    }
+   try{
+       const user = await User.findOne({login : req.body.login});
+       if(user.password === req.body.password){
+           res.json(user);
+       }else{
+           res.json('Wrong password');
+       }
 
-   const user = await User.find({}).select({"login": req.body.login});
-    res.json(user);
+   }catch(error){
+       res.json({message:error})
+   }
+
 });
 
 router.post('/addUser', async (req,res)=>{
