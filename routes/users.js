@@ -1,0 +1,51 @@
+const express = require('express');
+const router = express.Router();
+const User = require('../models/User');
+
+router.get('/findAll', async (req,res)=>{
+    try{
+        const users = await User.find();
+        res.json(users);
+    }catch(err){
+        res.json({message:err})
+    }
+});
+
+router.get('/findById/:userId', async (req,res)=>{
+   try{
+       const user = await User.findById(req.params.userId);
+       res.json(user)
+   } catch(err){
+       res.json({message:err})
+   }
+});
+
+router.get('/login', async (req, res)=>{
+   const loginData = {
+       login: req.body.login,
+       password: req.body.password
+   }
+
+   const user = await User.find({}).select({"login": req.body.login});
+    res.json(user);
+});
+
+router.post('/addUser', async (req,res)=>{
+    const newUser = new User({
+        name: req.body.name,
+        lastName: req.body.lastName,
+        albumNo: req.body.albumNo,
+        isEnabled: req.body.enabled,
+        login: req.body.login,
+        password: req.body.password,
+        university: req.body.university
+    });
+   try{
+        const addedUser = await newUser.save();
+        res.json(addedUser);
+   }catch(err){
+       res.json({message:err});
+   }
+});
+
+module.exports = router;
