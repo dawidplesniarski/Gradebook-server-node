@@ -8,9 +8,11 @@ app.use(bodyParser.json());
 
 const postsRoute = require('./routes/posts');
 const usersRoute = require('./routes/users');
+const gradesRoute = require('./routes/grades');
 
 app.use('/posts',postsRoute);
 app.use('/users',usersRoute);
+app.use('/grades',gradesRoute);
 
 
 const url = 'mongodb+srv://dawidplesniarski:zaqwsx@cluster0-fgsn7.mongodb.net/gradebook?retryWrites=true&w=majority\n';

@@ -18,7 +18,7 @@ router.get('/findById/:id', async (req,res)=>{
     }catch(err){
 
     }
-})
+});
 
 router.post('/',async (req,res) =>{
     const post = new Post({
