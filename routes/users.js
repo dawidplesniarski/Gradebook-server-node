@@ -20,7 +20,7 @@ router.get('/findById/:userId', async (req,res)=>{
    }
 });
 
-router.get('/login', async (req, res)=>{
+router.post('/login', async (req, res)=>{
    try{
        const user = await User.findOne({login : req.body.login});
        if(user.password === req.body.password){

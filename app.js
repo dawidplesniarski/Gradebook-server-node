@@ -15,10 +15,8 @@ app.use('/users',usersRoute);
 app.use('/grades',gradesRoute);
 
 
-const url = 'mongodb+srv://dawidplesniarski:zaqwsx@cluster0-fgsn7.mongodb.net/gradebook?retryWrites=true&w=majority\n';
-
 //Connect db
-mongoose.connect(url,
+mongoose.connect(process.env.DB_CONNECTION,
     {useNewUrlParser: true},
     ()=> console.log('DB connected')
 );
@@ -29,4 +27,4 @@ app.get('/',(req,res)=>{
   res.send('test');
 });
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
