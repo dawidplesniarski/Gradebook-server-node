@@ -20,6 +20,11 @@ router.get('/findById/:userId', async (req,res)=>{
    }
 });
 
+function LoginException(message) {
+    const error = new Error(message);
+    return error;
+}
+
 router.post('/login', async (req, res)=>{
    try{
        const user = await User.findOne({login : req.body.login});
@@ -27,11 +32,10 @@ router.post('/login', async (req, res)=>{
            res.json(user);
        }else{
            res.status(403);
-           throw "LoginException";
+           throw new LoginException('Login or password wrong');
        }
-
    }catch(error){
-       res.json({message:error})
+       res.json({message:'Login or password wrong!'})
    }
 
 });
