@@ -26,7 +26,8 @@ router.post('/login', async (req, res)=>{
        if(user.password === req.body.password){
            res.json(user);
        }else{
-           res.status(403).send('Wrong login or password')
+           res.status(403);
+           throw "LoginException";
        }
 
    }catch(error){
