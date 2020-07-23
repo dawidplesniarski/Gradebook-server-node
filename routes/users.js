@@ -35,6 +35,7 @@ router.post('/login', async (req, res)=>{
            throw new LoginException('Login or password wrong');
        }
    }catch(error){
+       res.status(403);
        res.json({message:'Login or password wrong!'})
    }
 
@@ -52,8 +53,10 @@ router.post('/addUser', async (req,res)=>{
     });
    try{
         const addedUser = await newUser.save();
+        res.status(201);
         res.json(addedUser);
    }catch(err){
+       res.status(403);
        res.json({message:err});
    }
 });
