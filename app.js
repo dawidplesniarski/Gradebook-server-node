@@ -9,10 +9,12 @@ app.use(bodyParser.json());
 const postsRoute = require('./routes/posts');
 const usersRoute = require('./routes/users');
 const gradesRoute = require('./routes/grades');
+const testRoute = require('./routes/tests');
 
 app.use('/posts',postsRoute);
 app.use('/users',usersRoute);
 app.use('/grades',gradesRoute);
+app.use('/test',testRoute);
 
 
 //Connect db

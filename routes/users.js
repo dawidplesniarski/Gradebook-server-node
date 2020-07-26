@@ -31,12 +31,10 @@ router.post('/login', async (req, res)=>{
        if(user.password === req.body.password){
            res.json(user);
        }else{
-           res.status(403);
-           throw new LoginException('Login or password wrong');
+           throw new Error('Login or password wrong');
        }
-   }catch(error){
-       res.status(403);
-       res.json({message:'Login or password wrong!'})
+   } catch (error){
+       res.send(error).status(403);
    }
 
 });
