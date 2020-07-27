@@ -33,7 +33,8 @@ router.get('/findAllTestsCategory', async(req, res) =>{
     try{
         const tests = await Test.find();
         const categories = tests.map(category => category.category);
-        res.json(categories);
+        const distinct = Array.from(new Set(categories));
+        res.json(distinct);
         res.status(200);
     } catch(err){
         res.json(err);
