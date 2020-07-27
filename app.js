@@ -10,11 +10,13 @@ const postsRoute = require('./routes/posts');
 const usersRoute = require('./routes/users');
 const gradesRoute = require('./routes/grades');
 const testRoute = require('./routes/tests');
+const permissionRoute = require('./routes/permissions');
 
 app.use('/posts',postsRoute);
 app.use('/users',usersRoute);
 app.use('/grades',gradesRoute);
 app.use('/test',testRoute);
+app.use('/permission',permissionRoute);
 
 
 //Connect db

@@ -27,6 +27,17 @@ router.get('/findByCategory/:category', async(req,res) =>{
     } catch(err){
         res.json({message:err})
     }
-})
+});
+
+router.get('/findAllTestsCategory', async(req, res) =>{
+    try{
+        const tests = await Test.find();
+        const categories = tests.map(category => category.category);
+        res.json(categories);
+        res.status(200);
+    } catch(err){
+        res.json(err);
+    }
+});
 
 module.exports = router;
