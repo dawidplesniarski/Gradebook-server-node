@@ -34,7 +34,8 @@ router.post('/login', async (req, res)=>{
            throw new Error('Login or password wrong');
        }
    } catch (error){
-       res.send(error).status(403);
+       res.status(403);
+       res.json({message:error});
    }
 
 });

@@ -29,7 +29,7 @@ router.get('/findByCategory/:category', async(req,res) =>{
     }
 });
 
-router.get('/findAllTestsCategory', async(req, res) =>{
+router.get('/findAllCategories', async(req, res) =>{
     try{
         const tests = await Test.find();
         const categories = tests.map(category => category.category);
