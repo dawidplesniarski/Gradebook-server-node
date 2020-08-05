@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const jws = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
 
 router.get('/findAll', async (req,res)=>{
     try{
@@ -20,11 +23,6 @@ router.get('/findById/:userId', async (req,res)=>{
    }
 });
 
-function LoginException(message) {
-    const error = new Error(message);
-    return error;
-}
-
 router.post('/login', async (req, res)=>{
    try{
        const user = await User.findOne({login : req.body.login});
@@ -41,13 +39,16 @@ router.post('/login', async (req, res)=>{
 });
 
 router.post('/addUser', async (req,res)=>{
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
     const newUser = new User({
         name: req.body.name,
         lastName: req.body.lastName,
         albumNo: req.body.albumNo,
         isEnabled: req.body.enabled,
         login: req.body.login,
-        password: req.body.password,
+        password: hashedPassword,
         university: req.body.university
     });
    try{
