@@ -47,6 +47,13 @@ router.post('/login', async (req, res)=>{
 router.post('/addUser', async (req,res)=>{
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    const userAlreadyExists = await User.findOne({albumNo: req.body.albumNo});
+
+    if(userAlreadyExists) {
+        return res
+            .status(409)
+            .send('User with album number already exists!');
+    }
 
     const newUser = new User({
         name: req.body.name,
