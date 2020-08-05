@@ -26,7 +26,13 @@ router.get('/findById/:userId', async (req,res)=>{
 router.post('/login', async (req, res)=>{
    try{
        const user = await User.findOne({login : req.body.login});
-       if(user.password === req.body.password){
+
+       const validPassword = await bcrypt.compare(
+         req.body.password,
+         user.password
+       );
+
+       if(validPassword){
            res.json(user);
        }else{
            throw new Error('Login or password wrong');
