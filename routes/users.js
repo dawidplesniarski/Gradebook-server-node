@@ -20,7 +20,7 @@ router.post('/test', verifyToken, async(req,res) => {
             res.sendStatus(403);
         } else {
             res.json({
-                message: 'Test complete'
+                authData
             });
         }
     });
