@@ -47,7 +47,7 @@ router.post('/login', async (req, res)=>{
        if(validPassword){
            jwt.sign({user},'secretkey',(err,token)=>{
                res.json({
-                   user,
+                   user: user,
                    token: token
                });
            })
@@ -58,6 +58,16 @@ router.post('/login', async (req, res)=>{
        res.status(403);
        res.json({message:error});
    }
+});
+
+router.delete('/delete/:userId', async(req, res) =>{
+    User.findByIdAndDelete(req.params.userId, (err) => {
+        if (err) {
+            res.status(404).send({message: `User with id: ${req.params.userId} not exists`});
+        } else {
+            res.send({message:`User with id: ${req.params.userId} deleted successfully`});
+        }
+    });
 });
 
 function verifyToken(req, res, next){
