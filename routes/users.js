@@ -114,15 +114,25 @@ router.post('/addUser', async (req,res)=>{
 
 router.put('/changePassword/:userId', async(req,res) =>{
     const salt = await bcrypt.genSalt(10);
-    const hashedNewPassword = await bcrypt.hash(req.body.password, salt);
+    const hashedNewPassword = await bcrypt.hash(req.body.newPassword, salt);
     const user = await User.findById(req.params.userId);
-    user.update({password: hashedNewPassword}, (err)=>{
-        if(err){
-            res.status(403).send({message: 'Cannot update password'});
-        } else {
-            res.status(200).send({message:'Task failed successfully'});
-        }
-    });
+
+    const validPassword = await bcrypt.compare(
+        req.body.password,
+        user.password
+    );
+
+    if(validPassword && req.body.newPassword === req.body.confirmPassword) {
+        user.update({password: hashedNewPassword}, (err)=>{
+            if(err){
+                res.status(403).send({message: 'Cannot update password'});
+            } else {
+                res.status(200).send({message:'Task failed successfully'});
+            }
+        });
+    } else {
+        res.status(403).send({message : 'your account password is not correct or new passwords not matches'});
+    }
     // User.findByIdAndUpdate(req.params.userId,{password: hashedNewPassword}, (err)=>{
     //     if(err){
     //         res.status(403).send({message: 'Cannot update password'});
