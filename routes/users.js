@@ -14,17 +14,17 @@ router.get('/findAll', async (req,res)=>{
     }
 });
 
-router.post('/test', verifyToken, async(req,res) => {
-    jwt.verify(req.token, 'secretkey', (err, authData) => {
-        if(err){
-            res.sendStatus(403);
-        } else {
-            res.json({
-                authData
-            });
-        }
-    });
-});
+// router.post('/test', verifyToken, async(req,res) => {
+//     jwt.verify(req.token, 'secretkey', (err, authData) => {
+//         if(err){
+//             res.sendStatus(403);
+//         } else {
+//             res.json({
+//                 authData
+//             });
+//         }
+//     });
+// });
 
 router.get('/findById/:userId', async (req,res)=>{
    try{
@@ -84,12 +84,13 @@ function verifyToken(req, res, next){
 router.post('/addUser', async (req,res)=>{
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    const userAlreadyExists = await User.findOne({albumNo: req.body.albumNo});
+    const userWithAlbum = await User.findOne({albumNo: req.body.albumNo});
+    const userWithLogin = await User.findOne({login: req.body.login});
 
-    if(userAlreadyExists) {
+    if(userWithLogin || userWithAlbum) {
         return res
             .status(409)
-            .send('User with album number already exists!');
+            .send('User with album or login number already exists!');
     }
 
     const newUser = new User({
@@ -109,6 +110,26 @@ router.post('/addUser', async (req,res)=>{
        res.status(403);
        res.json({message:err});
    }
+});
+
+router.put('/changePassword/:userId', async(req,res) =>{
+    const salt = await bcrypt.genSalt(10);
+    const hashedNewPassword = await bcrypt.hash(req.body.password, salt);
+    const user = await User.findById(req.params.userId);
+    user.update({password: hashedNewPassword}, (err)=>{
+        if(err){
+            res.status(403).send({message: 'Cannot update password'});
+        } else {
+            res.status(200).send({message:'Task failed successfully'});
+        }
+    });
+    // User.findByIdAndUpdate(req.params.userId,{password: hashedNewPassword}, (err)=>{
+    //     if(err){
+    //         res.status(403).send({message: 'Cannot update password'});
+    //     } else {
+    //         res.status(200).send({message:'Task failed successfully'});
+    //     }
+    // });
 });
 
 module.exports = router;
