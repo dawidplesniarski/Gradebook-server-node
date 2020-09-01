@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controller/UsersController')
+const userController = require('../controller/UsersController');
+const verifyToken = require('../utils/verifyToken');
 
 
 router.post('/test', verifyToken, userController.test);
@@ -18,16 +19,5 @@ router.put('/changePassword/:userId', userController.changePassword);
 router.get('/findAll', userController.findAll);
 
 //just put verifyToken inside router to protect route with JWT
-
-function verifyToken(req, res, next){
-    const bearerHeader = req.headers['authorization'];
-    if(typeof bearerHeader !== 'undefined'){
-        const bearer = bearerHeader.split(' ');
-        req.token = bearer[1];
-        next();
-    } else {
-        res.sendStatus(403);
-    }
-}
 
 module.exports = router;
