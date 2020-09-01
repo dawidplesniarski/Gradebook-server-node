@@ -1,44 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const Test = require('../models/Test');
+const quizController = require('../controller/QuizController')
 
 
-router.post('/addQuestion',async (req,res) =>{
-    const test = new Test({
-        category: req.body.category,
-        question : req.body.question,
-        correctAnswer : req.body.correctAnswer,
-        answers : req.body.answers
-    });
+router.post('/addQuestion', quizController.addQuestion);
 
-    try{
-        const savedTest = await test.save();
-        res.json(savedTest);
-    }catch(err){
+router.get('/findByCategory/:category', quizController.findByCategory);
 
-    }
-});
-
-router.get('/findByCategory/:category', async(req,res) =>{
-    try{
-        const test = await Test.find({category : req.params.category});
-        res.json(test);
-        res.status(200);
-    } catch(err){
-        res.json({message:err})
-    }
-});
-
-router.get('/findAllCategories', async(req, res) =>{
-    try{
-        const tests = await Test.find();
-        const categories = tests.map(category => category.category);
-        const distinct = Array.from(new Set(categories));
-        res.json(distinct);
-        res.status(200);
-    } catch(err){
-        res.json(err);
-    }
-});
+router.get('/findAllCategories', quizController.findAllCategories);
 
 module.exports = router;

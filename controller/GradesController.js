@@ -1,4 +1,3 @@
-const express = require('express');
 const Grades = require('../models/Grades');
 
 const GradesController = {
