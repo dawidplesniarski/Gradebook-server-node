@@ -7,30 +7,41 @@ const PermissionsController = {
             userAlbums: req.body.userAlbums
         });
 
-        try{
+        try {
             const savedPermissions = await permission.save();
             res.status(201);
             res.json(savedPermissions);
-        }catch(err){
+        } catch (err) {
             res.json(err);
         }
     },
     findPermissionByCategory: async (req, res) => {
-        try{
-            const permissions = await Permissions.find({category : req.params.category});
+        try {
+            const permissions = await Permissions.find({category: req.params.category});
             res.json(permissions);
-        }catch(err){
+        } catch (err) {
             res.json(err);
         }
     },
     deleteUserAlbum: async (req, res) => {
-        try{
+        try {
             await Permissions.updateOne(
                 {category: req.body.category},
-                { $pull: { userAlbums: req.body.album } },
-                { multi: true });
+                {$pull: {userAlbums: req.body.album}},
+                {multi: true});
             res.json({message: 'Album deleted successfully'});
-        }catch (err){
+        } catch (err) {
+            res.json(err);
+        }
+    },
+    addUserAlbum: async (req, res) => {
+        try {
+            await Permissions.updateOne(
+                { category: req.body.category },
+                { $push: { userAlbums: req.body.album } }
+            );
+            res.json({message : 'Album added successfully'});
+        } catch (err) {
             res.json(err);
         }
     }
