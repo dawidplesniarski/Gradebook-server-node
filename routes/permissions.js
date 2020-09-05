@@ -7,5 +7,6 @@ router.post('/addPermission', permissionsController.addPermission);
 
 router.get('/findByCategory/:category', permissionsController.findPermissionByCategory);
 
+router.put('/deleteAlbum', permissionsController.deleteUserAlbum);
 
 module.exports = router;
