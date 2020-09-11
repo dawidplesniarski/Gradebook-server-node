@@ -5,7 +5,7 @@ const verifyToken = require('../utils/verifyToken');
 
 router.get('/findAll', gradesController.findAll);
 
-router.get('/findByStudentId/:id', gradesController.findById);
+router.get('/findByAlbum/:studentAlbum', gradesController.findByAlbum);
 
 router.post('/addGrade', gradesController.addGrade);
 

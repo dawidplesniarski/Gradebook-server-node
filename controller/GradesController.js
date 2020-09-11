@@ -9,9 +9,9 @@ const GradesController = {
             res.json({message:err})
         }
     },
-    findById : async (req,res)=>{
+    findByAlbum : async (req,res)=>{
         try{
-            const studentGrades = await Grades.find({studentId: req.params.id});
+            const studentGrades = await Grades.find({studentId: req.params.studentAlbum});
             res.json(studentGrades);
         }catch(err){
             res.json({message:err})
@@ -19,7 +19,7 @@ const GradesController = {
     },
     addGrade: async (req,res) =>{
         const grade = new Grades({
-            studentId: req.body.studentId,
+            studentAlbum: req.body.studentAlbum,
             grade : req.body.grade,
             subject: req.body.subject
         });

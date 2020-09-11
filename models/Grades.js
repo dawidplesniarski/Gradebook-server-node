@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const GradesSchema = mongoose.Schema({
-    studentId: {
+    studentAlbum: {
         type:String,
         required: true
     },
