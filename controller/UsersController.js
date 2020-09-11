@@ -71,9 +71,12 @@ const UserController = {
             lastName: req.body.lastName,
             albumNo: req.body.albumNo,
             isEnabled: req.body.enabled,
+            isAdmin: req.body.isAdmin,
             login: req.body.login,
             password: hashedPassword,
-            university: req.body.university
+            university: req.body.university,
+            imageUrl: req.body.imageUrl,
+            email: req.body.email
         });
         try{
             const addedUser = await newUser.save();

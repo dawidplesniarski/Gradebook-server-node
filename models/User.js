@@ -17,6 +17,10 @@ const UserSchema = mongoose.Schema({
         type:Boolean,
         required: true
     },
+    isAdmin:{
+      type:Boolean,
+      required: true
+    },
     login:{
         type:String,
         required:true
@@ -28,6 +32,14 @@ const UserSchema = mongoose.Schema({
     university:{
         type:String,
         required: true
+    },
+    email:{
+        type:String,
+        required: true
+    },
+    imageUrl:{
+        type:String,
+        required: false
     }
 });
 
