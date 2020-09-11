@@ -11,7 +11,7 @@ const GradesController = {
     },
     findByAlbum : async (req,res)=>{
         try{
-            const studentGrades = await Grades.find({studentId: req.params.studentAlbum});
+            const studentGrades = await Grades.find({studentAlbum: req.params.studentAlbum});
             res.json(studentGrades);
         }catch(err){
             res.json({message:err})
