@@ -18,6 +18,8 @@ router.put('/changePassword/:userId', userController.changePassword);
 
 router.get('/findAll', userController.findAll);
 
+router.put('/updateImage', userController.updateImage);
+
 //just put verifyToken inside router to protect route with JWT
 
 module.exports = router;

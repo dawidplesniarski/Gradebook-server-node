@@ -109,9 +109,9 @@ const UserController = {
             res.status(403).send({message : 'your account password is not correct or new passwords not matches'});
         }
     },
-    test: async(req,res) => {
+    test: async (req, res) => {
         jwt.verify(req.token, 'secretkey', (err, authData) => {
-            if(err){
+            if (err) {
                 res.sendStatus(403);
             } else {
                 res.json({
@@ -119,6 +119,14 @@ const UserController = {
                 });
             }
         });
+    },
+    updateImage: async (req, res) => {
+      try{
+          await User.findOneAndUpdate({albumNo: req.body.albumNo}, {imageUrl: req.body.imageUrl});
+          res.status(200).send('Image url updated successfully');
+      }catch (err){
+          res.status(404).send('Problem with url update');
+      }
     }
 }
 
