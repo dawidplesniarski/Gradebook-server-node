@@ -30,6 +30,14 @@ const GradesController = {
         }catch(err){
             res.json({message:err});
         }
+    },
+    findLatest: async(req, res) =>{
+        try{
+            const latestGrade = await Grades.findOne({albumNo: req.param.albumNo}).sort({date: -1}).limit(1);
+            res.json(latestGrade)
+        }catch(err){
+            res.json(err);
+        }
     }
 }
 module.exports = GradesController;
