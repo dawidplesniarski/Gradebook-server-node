@@ -11,12 +11,14 @@ const gradesRoute = require('./routes/grades');
 const testRoute = require('./routes/tests');
 const permissionRoute = require('./routes/permissions');
 const coursesRoute = require('./routes/courses');
+const universityRoute = require('./routes/university');
 
 app.use('/users', usersRoute);
 app.use('/grades', gradesRoute);
 app.use('/test', testRoute);
 app.use('/permission', permissionRoute);
 app.use('/course', coursesRoute);
+app.use('/university', universityRoute);
 
 
 //Connect db
