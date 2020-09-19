@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Course = require('../models/Course');
+const University = require('../models/University');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
@@ -40,6 +41,7 @@ const UserController = {
         try {
             const user = await User.findOne({login: req.body.login});
             const courseName = await Course.findById(user.courseId);
+            const universityName = await University.findById(user.universityId);
 
             const validPassword = await bcrypt.compare(
                 req.body.password,
@@ -51,7 +53,8 @@ const UserController = {
                     res.json({
                         user: user,
                         token: token,
-                        course: courseName
+                        course: courseName,
+                        university: universityName
                     });
                 })
             } else {
@@ -91,7 +94,7 @@ const UserController = {
             isAdmin: req.body.isAdmin,
             login: req.body.login,
             password: hashedPassword,
-            university: req.body.university,
+            universityId: req.body.universityId,
             imageUrl: req.body.imageUrl,
             email: req.body.email,
             courseId: req.body.courseId
