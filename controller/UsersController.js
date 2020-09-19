@@ -39,6 +39,7 @@ const UserController = {
     login: async (req, res) => {
         try {
             const user = await User.findOne({login: req.body.login});
+            const courseName = await Course.findById(user.courseId);
 
             const validPassword = await bcrypt.compare(
                 req.body.password,
@@ -49,7 +50,8 @@ const UserController = {
                 jwt.sign({user}, 'secretkey', (err, token) => {
                     res.json({
                         user: user,
-                        token: token
+                        token: token,
+                        course: courseName
                     });
                 })
             } else {
