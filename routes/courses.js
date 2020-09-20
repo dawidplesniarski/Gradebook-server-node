@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const coursesController = require('../controller/CoursesController')
+const coursesController = require('../controller/CoursesController');
 
 router.get('/findAll', coursesController.findAll);
 
