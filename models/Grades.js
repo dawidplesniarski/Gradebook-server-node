@@ -2,16 +2,16 @@ const mongoose = require('mongoose');
 
 const GradesSchema = mongoose.Schema({
     studentAlbum: {
-        type:String,
+        type: String,
         required: true
     },
-    grade:{
-        type:Number,
+    grade: {
+        type: Number,
         required: true
     },
     subject: {
-        type:String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Subject'
     },
     date: {
         type: Date,
@@ -20,4 +20,4 @@ const GradesSchema = mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('Grades',GradesSchema);
+module.exports = mongoose.model('Grades', GradesSchema);

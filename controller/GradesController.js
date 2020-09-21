@@ -1,9 +1,10 @@
 const Grades = require('../models/Grades');
+const Subject = require('../models/Subject');
 
 const GradesController = {
     findAll: async (req,res)=>{
         try{
-            const grades = await Grades.find();
+            const grades = await Grades.find().populate('subject');
             res.json(grades);
         }catch(err){
             res.json({message:err})
@@ -11,7 +12,7 @@ const GradesController = {
     },
     findByAlbum : async (req,res)=>{
         try{
-            const studentGrades = await Grades.find({studentAlbum: req.params.studentAlbum});
+            const studentGrades = await Grades.find({studentAlbum: req.params.studentAlbum}).populate('subject');
             res.json(studentGrades);
         }catch(err){
             res.json({message:err})

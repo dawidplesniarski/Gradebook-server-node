@@ -13,19 +13,27 @@ const SubjectsController = {
         const subject = new Subject({
             subjectName: req.body.subjectName
         });
-        try{
+        try {
             const savedSubject = await subject.save();
             res.status(201).send(savedSubject);
-        }catch (err){
+        } catch (err) {
             res.json({message: err});
         }
     },
-    findById: async (req, res) =>{
-        try{
+    findById: async (req, res) => {
+        try {
             const subject = await Subject.findById(req.params.subjectId);
             res.status(200).send(subject);
-        } catch(err){
+        } catch (err) {
             res.status(404).send(err);
+        }
+    },
+    findByName: async (req, res) => {
+        try{
+            const subject = await Subject.findOne({subjectName: {$regex: new RegExp(req.params.subjectName, "i")}});
+            res.status(200).send(subject);
+        }catch(err){
+            res.status(404).send({message: err});
         }
     }
 };
