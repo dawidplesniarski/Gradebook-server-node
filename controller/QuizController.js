@@ -18,7 +18,7 @@ const QuizController = {
     },
     findByCategory: async(req,res) =>{
         try{
-            const test = await Test.find({category : req.params.category});
+            const test = await Test.find({category: {$regex: new RegExp(req.params.category, "i")}});
             res.json(test);
             res.status(200);
         } catch(err){
