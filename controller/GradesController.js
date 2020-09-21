@@ -34,7 +34,7 @@ const GradesController = {
     },
     findLatest: async (req, res) => {
         try {
-            const latestGrade = await Grades.findOne({studentAlbum: req.params.studentAlbum}, {}, {sort: {'date': -1}});
+            const latestGrade = await Grades.findOne({studentAlbum: req.params.studentAlbum}, {}, {sort: {'date': -1}}).populate('subject');
             res.json(latestGrade);
         } catch (err) {
             res.json(err);
