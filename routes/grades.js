@@ -11,4 +11,6 @@ router.post('/addGrade', gradesController.addGrade);
 
 router.get('/findLatest/:studentAlbum', gradesController.findLatest);
 
+router.post('/addTestGrade', gradesController.addTestGrade);
+
 module.exports = router;
