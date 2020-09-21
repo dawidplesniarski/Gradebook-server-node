@@ -41,11 +41,11 @@ const GradesController = {
         }
     },
     addTestGrade: async (req, res) => {
-        const subjectId = await Subject.findOne({subjectName: {$regex: new RegExp(req.params.subject, "i")}}).select('_id');
+        const subject = await Subject.findOne({subjectName: {$regex: new RegExp(req.body.subject, "i")}}, {_id: 1});
         const grade = new Grades({
             studentAlbum: req.body.studentAlbum,
             grade: req.body.grade,
-            subject: subjectId
+            subject: subject
         });
         try {
             const savedGrade = await grade.save();
