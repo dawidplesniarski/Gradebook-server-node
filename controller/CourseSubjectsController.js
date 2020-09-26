@@ -20,6 +20,18 @@ const CourseSubjectsController = {
         } catch (err) {
             res.json(err);
         }
+    },
+    findCourseSubjectsBySemester: async (req, res) => {
+        try {
+            if (req.params.semesterNumber < 1) {
+                throw new Error('Wrong semester number typed');
+            }
+            const semesterSubjects = await CourseSubjects.findOne({course: req.params.courseName});
+            const subjects = semesterSubjects.semesters[req.params.semesterNumber - 1];
+            res.json(subjects);
+        } catch (err) {
+            res.status(404).send({message: "Error"});
+        }
     }
 };
 
