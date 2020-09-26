@@ -13,6 +13,7 @@ const permissionRoute = require('./routes/permissions');
 const coursesRoute = require('./routes/courses');
 const universityRoute = require('./routes/university');
 const subjectsRoute = require('./routes/subjects');
+const courseSubjectsRoute = require('./routes/courseSubjects');
 
 app.use('/users', usersRoute);
 app.use('/grades', gradesRoute);
@@ -21,6 +22,7 @@ app.use('/permission', permissionRoute);
 app.use('/course', coursesRoute);
 app.use('/university', universityRoute);
 app.use('/subject', subjectsRoute);
+app.use('/courseSubjects', courseSubjectsRoute);
 
 
 //Connect db
