@@ -11,9 +11,9 @@ const QuizController = {
 
         try{
             const savedTest = await test.save();
-            res.json(savedTest);
+            res.status(201).send(savedTest);
         }catch(err){
-
+            res.status(404).send({message: err});
         }
     },
     findByCategory: async(req,res) =>{

@@ -27,9 +27,9 @@ const GradesController = {
 
         try {
             const savedGrade = await grade.save();
-            res.json(savedGrade);
+            res.status(201).send(savedGrade);
         } catch (err) {
-            res.json({message: err});
+            res.status(404).send({message: err});
         }
     },
     findLatest: async (req, res) => {
