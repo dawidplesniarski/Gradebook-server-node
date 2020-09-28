@@ -8,23 +8,8 @@ const bcrypt = require('bcryptjs');
 const UserController = {
     findByID: async (req, res) => {
         try {
-            const foundUser = await User.findById(req.params.userId);
-            const foundCourse = await Course.findById(foundUser.courseId);
-            const user = {
-                _id: foundUser._id,
-                name: foundUser.name,
-                lastName: foundUser.lastName,
-                albumNo: foundUser.albumNo,
-                isEnabled: foundUser.isEnabled,
-                isAdmin: foundUser.isAdmin,
-                login: foundUser.login,
-                password: foundUser.password,
-                university: foundUser.university,
-                imageUrl: foundUser.imageUrl,
-                email: foundUser.email,
-                courseName: foundCourse.courseName
-            }
-            res.json(user)
+            const foundUser = await User.findById(req.params.userId).populate(['courseId', 'universityId']);
+            res.json(foundUser);
         } catch (err) {
             res.json({message: err})
         }
@@ -91,7 +76,6 @@ const UserController = {
             lastName: req.body.lastName,
             albumNo: req.body.albumNo,
             isEnabled: req.body.enabled,
-            isAdmin: req.body.isAdmin,
             login: req.body.login,
             password: hashedPassword,
             universityId: req.body.universityId,
@@ -133,7 +117,7 @@ const UserController = {
     test: async (req, res) => {
         jwt.verify(req.token, 'secretkey', (err, authData) => {
             if (err) {
-                res.sendStatus(403);
+                res.sendStatus(418);
             } else {
                 res.json({
                     authData
@@ -147,6 +131,14 @@ const UserController = {
             res.status(200).send('Image url updated successfully');
         } catch (err) {
             res.status(404).send('Problem with url update');
+        }
+    },
+    findUserCourses: async (req, res) => {
+        try {
+           const courses = await User.findById(req.params.userId).populate(['courseId']).select('courseId');
+           res.status(200).send(courses.courseId);
+        } catch (err) {
+            res.status(404).send({message: err});
         }
     }
 }

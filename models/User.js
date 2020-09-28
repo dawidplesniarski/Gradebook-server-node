@@ -17,10 +17,6 @@ const UserSchema = mongoose.Schema({
         type: Boolean,
         required: true
     },
-    isAdmin: {
-        type: Boolean,
-        required: true
-    },
     login: {
         type: String,
         required: true
@@ -30,8 +26,8 @@ const UserSchema = mongoose.Schema({
         required: true
     },
     universityId: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectID,
+        ref: 'University'
     },
     email: {
         type: String,
@@ -41,10 +37,12 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    courseId: {
-        type: String,
-        required: true
-    }
+    courseId: [
+        {
+            type: mongoose.Schema.Types.ObjectID,
+            ref: 'Course'
+        }
+    ]
 });
 
 module.exports = mongoose.model('Users', UserSchema);
