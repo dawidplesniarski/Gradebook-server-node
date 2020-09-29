@@ -22,6 +22,10 @@ router.put('/updateImage', userController.updateImage);
 
 router.get('/findUserCourses/:userId', userController.findUserCourses);
 
+router.get('/findByUniversity/:universityName', userController.findByUniversity);
+
+router.get('/findByCourse/:courseName', userController.findByCourse);
+
 //just put verifyToken inside router to protect route with JWT
 
 module.exports = router;

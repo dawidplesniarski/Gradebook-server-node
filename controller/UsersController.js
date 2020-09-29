@@ -4,7 +4,6 @@ const University = require('../models/University');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-
 const UserController = {
     findByID: async (req, res) => {
         try {
@@ -16,7 +15,7 @@ const UserController = {
     },
     findAll: async (req, res) => {
         try {
-            const users = await User.find();
+            const users = await User.find().populate(['courseId', 'universityId']);
             res.json(users);
         } catch (err) {
             res.json({message: err})
@@ -24,9 +23,7 @@ const UserController = {
     },
     login: async (req, res) => {
         try {
-            const user = await User.findOne({login: req.body.login});
-            const courseName = await Course.findById(user.courseId);
-            const universityName = await University.findById(user.universityId);
+            const user = await User.findOne({login: req.body.login}).populate(['courseId', 'universityId']);
 
             const validPassword = await bcrypt.compare(
                 req.body.password,
@@ -38,8 +35,8 @@ const UserController = {
                     res.json({
                         user: user,
                         token: token,
-                        course: courseName,
-                        university: universityName
+                        //course: courseName,
+                        //university: universityName
                     });
                 })
             } else {
@@ -135,10 +132,32 @@ const UserController = {
     },
     findUserCourses: async (req, res) => {
         try {
-           const courses = await User.findById(req.params.userId).populate(['courseId']).select('courseId');
-           res.status(200).send(courses.courseId);
+            const courses = await User.findById(req.params.userId).populate(['courseId']).select('courseId');
+            res.status(200).send(courses.courseId);
         } catch (err) {
             res.status(404).send({message: err});
+        }
+    },
+    findByUniversity: async (req, res) => {
+        try {
+            const universityId = await University.findOne({universityName: req.params.universityName});
+            const students = await User.find();
+
+            //TODO: usprawnić filtrowanie
+            res.status(200).send(students.filter(student => student.universityId.equals(universityId._id)));
+        } catch (err) {
+            res.status(404).send(err);
+        }
+    },
+    findByCourse: async (req, res) => {
+        try {
+            const courseId = await Course.findOne({courseName: req.params.courseName});
+            const students = await User.find();
+
+            //TODO: usprawnić filtrowanie
+            res.status(200).send(students.filter(student => student.courseId.includes(courseId._id)))
+        } catch (err) {
+            res.status(404).send(err);
         }
     }
 }
