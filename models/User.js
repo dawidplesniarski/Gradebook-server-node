@@ -26,7 +26,7 @@ const UserSchema = mongoose.Schema({
         required: true
     },
     universityId: {
-        type: mongoose.Schema.Types.ObjectID,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'University'
     },
     email: {
@@ -39,7 +39,7 @@ const UserSchema = mongoose.Schema({
     },
     courseId: [
         {
-            type: mongoose.Schema.Types.ObjectID,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Course'
         }
     ]

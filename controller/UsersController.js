@@ -141,10 +141,9 @@ const UserController = {
     findByUniversity: async (req, res) => {
         try {
             const universityId = await University.findOne({universityName: req.params.universityName});
-            const students = await User.find();
+            const students = await User.find({universityId: universityId._id});
 
-            //TODO: usprawnić filtrowanie
-            res.status(200).send(students.filter(student => student.universityId.equals(universityId._id)));
+            res.status(200).send(students);
         } catch (err) {
             res.status(404).send(err);
         }
@@ -152,10 +151,9 @@ const UserController = {
     findByCourse: async (req, res) => {
         try {
             const courseId = await Course.findOne({courseName: req.params.courseName});
-            const students = await User.find();
+            const students = await User.find({courseId: courseId._id});
 
-            //TODO: usprawnić filtrowanie
-            res.status(200).send(students.filter(student => student.courseId.includes(courseId._id)))
+            res.status(200).send(students);
         } catch (err) {
             res.status(404).send(err);
         }
