@@ -14,6 +14,7 @@ const coursesRoute = require('./routes/courses');
 const universityRoute = require('./routes/university');
 const subjectsRoute = require('./routes/subjects');
 const courseSubjectsRoute = require('./routes/courseSubjects');
+const subjectDetailsRoute = require('./routes/subjectDetails');
 
 app.use('/users', usersRoute);
 app.use('/grades', gradesRoute);
@@ -23,6 +24,7 @@ app.use('/course', coursesRoute);
 app.use('/university', universityRoute);
 app.use('/subject', subjectsRoute);
 app.use('/courseSubjects', courseSubjectsRoute);
+app.use('/subjectDetails', subjectDetailsRoute);
 
 
 //Connect db
@@ -36,7 +38,7 @@ mongoose.connect(process.env.DB_CONNECTION,
 
 //ROUTES
 app.get('/', (req, res) => {
-    res.send('test');
+    res.send('Hello Gradebook server!');
 });
 
 app.listen(process.env.PORT || 3000);

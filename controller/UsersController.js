@@ -4,34 +4,18 @@ const University = require('../models/University');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-
 const UserController = {
     findByID: async (req, res) => {
         try {
-            const foundUser = await User.findById(req.params.userId);
-            const foundCourse = await Course.findById(foundUser.courseId);
-            const user = {
-                _id: foundUser._id,
-                name: foundUser.name,
-                lastName: foundUser.lastName,
-                albumNo: foundUser.albumNo,
-                isEnabled: foundUser.isEnabled,
-                isAdmin: foundUser.isAdmin,
-                login: foundUser.login,
-                password: foundUser.password,
-                university: foundUser.university,
-                imageUrl: foundUser.imageUrl,
-                email: foundUser.email,
-                courseName: foundCourse.courseName
-            }
-            res.json(user)
+            const foundUser = await User.findById(req.params.userId).populate(['courseId', 'universityId']);
+            res.json(foundUser);
         } catch (err) {
             res.json({message: err})
         }
     },
     findAll: async (req, res) => {
         try {
-            const users = await User.find();
+            const users = await User.find().populate(['courseId', 'universityId']);
             res.json(users);
         } catch (err) {
             res.json({message: err})
@@ -39,9 +23,7 @@ const UserController = {
     },
     login: async (req, res) => {
         try {
-            const user = await User.findOne({login: req.body.login});
-            const courseName = await Course.findById(user.courseId);
-            const universityName = await University.findById(user.universityId);
+            const user = await User.findOne({login: req.body.login}).populate(['courseId', 'universityId']);
 
             const validPassword = await bcrypt.compare(
                 req.body.password,
@@ -53,8 +35,8 @@ const UserController = {
                     res.json({
                         user: user,
                         token: token,
-                        course: courseName,
-                        university: universityName
+                        //course: courseName,
+                        //university: universityName
                     });
                 })
             } else {
@@ -91,7 +73,6 @@ const UserController = {
             lastName: req.body.lastName,
             albumNo: req.body.albumNo,
             isEnabled: req.body.enabled,
-            isAdmin: req.body.isAdmin,
             login: req.body.login,
             password: hashedPassword,
             universityId: req.body.universityId,
@@ -133,7 +114,7 @@ const UserController = {
     test: async (req, res) => {
         jwt.verify(req.token, 'secretkey', (err, authData) => {
             if (err) {
-                res.sendStatus(403);
+                res.sendStatus(418);
             } else {
                 res.json({
                     authData
@@ -147,6 +128,34 @@ const UserController = {
             res.status(200).send('Image url updated successfully');
         } catch (err) {
             res.status(404).send('Problem with url update');
+        }
+    },
+    findUserCourses: async (req, res) => {
+        try {
+            const courses = await User.findById(req.params.userId).populate(['courseId']).select('courseId');
+            res.status(200).send(courses.courseId);
+        } catch (err) {
+            res.status(404).send({message: err});
+        }
+    },
+    findByUniversity: async (req, res) => {
+        try {
+            const universityId = await University.findOne({universityName: req.params.universityName});
+            const students = await User.find({universityId: universityId._id});
+
+            res.status(200).send(students);
+        } catch (err) {
+            res.status(404).send(err);
+        }
+    },
+    findByCourse: async (req, res) => {
+        try {
+            const courseId = await Course.findOne({courseName: req.params.courseName});
+            const students = await User.find({courseId: courseId._id});
+
+            res.status(200).send(students);
+        } catch (err) {
+            res.status(404).send(err);
         }
     }
 }

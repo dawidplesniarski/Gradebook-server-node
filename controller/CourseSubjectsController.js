@@ -18,7 +18,7 @@ const CourseSubjectsController = {
             const savedCourseSubjects = await courseSubjects.save();
             res.status(201).send(savedCourseSubjects);
         } catch (err) {
-            res.json(err);
+            res.status(404).send({message: err});
         }
     },
     findCourseSubjectsBySemester: async (req, res) => {

@@ -1,4 +1,5 @@
 const Subject = require('../models/Subject');
+const SubjectDetails = require('../models/SubjectDetails');
 
 const SubjectsController = {
     findAll: async (req, res) => {
@@ -23,7 +24,12 @@ const SubjectsController = {
     findById: async (req, res) => {
         try {
             const subject = await Subject.findById(req.params.subjectId);
-            res.status(200).send(subject);
+            const subjectDetails = await SubjectDetails.findOne({subjectName: subject.subjectName});
+            const subjectWithDetails = {
+                subject: subject,
+                subjectDetails : subjectDetails
+            }
+            res.status(200).send(subjectWithDetails);
         } catch (err) {
             res.status(404).send(err);
         }
@@ -31,7 +37,12 @@ const SubjectsController = {
     findByName: async (req, res) => {
         try{
             const subject = await Subject.findOne({subjectName: {$regex: new RegExp(req.params.subjectName, "i")}});
-            res.status(200).send(subject);
+            const subjectDetails = await SubjectDetails.findOne({subjectName : subject.subjectName});
+            const subjectWithDetails = {
+                subject: subject,
+                subjectDetails: subjectDetails
+            }
+            res.status(200).send(subjectWithDetails);
         }catch(err){
             res.status(404).send({message: err});
         }
