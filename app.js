@@ -15,6 +15,7 @@ const universityRoute = require('./routes/university');
 const subjectsRoute = require('./routes/subjects');
 const courseSubjectsRoute = require('./routes/courseSubjects');
 const subjectDetailsRoute = require('./routes/subjectDetails');
+const employeeRoute = require('./routes/employees');
 
 app.use('/users', usersRoute);
 app.use('/grades', gradesRoute);
@@ -25,6 +26,7 @@ app.use('/university', universityRoute);
 app.use('/subject', subjectsRoute);
 app.use('/courseSubjects', courseSubjectsRoute);
 app.use('/subjectDetails', subjectDetailsRoute);
+app.use('/employee', employeeRoute);
 
 
 //Connect db

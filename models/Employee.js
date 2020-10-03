@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
-const UserSchema = mongoose.Schema({
+const Employee = mongoose.Schema({
+    academicTitle: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
@@ -9,11 +13,7 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    albumNo: {
-        type: String,
-        required: true
-    },
-    isEnabled: {
+    isAdmin: {
         type: Boolean,
         required: true
     },
@@ -25,10 +25,12 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    universityId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'University'
-    },
+    universityId: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'University'
+        }
+    ],
     email: {
         type: String,
         required: true
@@ -36,19 +38,7 @@ const UserSchema = mongoose.Schema({
     imageUrl: {
         type: String,
         required: false
-    },
-    courseId: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Course'
-        }
-    ],
-    semesters: [
-        {
-            type: String,
-            required: true
-        }
-    ]
-});
+    }
+})
 
-module.exports = mongoose.model('Users', UserSchema);
+module.exports = mongoose.model('Employee', Employee);
