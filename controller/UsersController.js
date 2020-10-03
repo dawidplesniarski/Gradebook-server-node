@@ -78,7 +78,8 @@ const UserController = {
             universityId: req.body.universityId,
             imageUrl: req.body.imageUrl,
             email: req.body.email,
-            courseId: req.body.courseId
+            courseId: req.body.courseId,
+            semesters: req.body.semesters
         });
         try {
             const addedUser = await newUser.save();
