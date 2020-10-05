@@ -206,6 +206,17 @@ const UserController = {
         } catch (err) {
             res.status(400).send({message: 'Semester increase failed'});
         }
+    },
+    decreaseSemester: async (req, res) => {
+        try {
+            await User.updateOne(
+                {albumNo: req.body.albumNo},
+                {$inc: {[`semesters.${req.body.index}`] : -1}}
+            );
+            res.status(200).send({message: 'Semester decreased successfully'});
+        } catch (err) {
+            res.status(400).send({message: 'Semester decrease failed'});
+        }
     }
 }
 
