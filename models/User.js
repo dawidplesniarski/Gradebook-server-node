@@ -45,7 +45,7 @@ const UserSchema = mongoose.Schema({
     ],
     semesters: [
         {
-            type: String,
+            type: Number,
             required: true
         }
     ]

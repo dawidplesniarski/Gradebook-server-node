@@ -175,7 +175,7 @@ const UserController = {
             // TODO: This function need to simplify and optimize.
             await User.updateOne(
                 {albumNo: req.body.albumNo},
-                {$unset: { [`courseId.${req.body.index}`]: 1}}
+                {$unset: {[`courseId.${req.body.index}`]: 1}}  //delete course ID at specific index
             );
             await User.updateOne(
                 {albumNo: req.body.albumNo},
@@ -184,7 +184,7 @@ const UserController = {
             );
             await User.updateOne(
                 {albumNo: req.body.albumNo},
-                {$unset: { [`semesters.${req.body.index}`]: 1}}
+                {$unset: {[`semesters.${req.body.index}`]: 1}} //delete semester at the same index as course ID
             );
             await User.updateOne(
                 {albumNo: req.body.albumNo},
@@ -194,6 +194,17 @@ const UserController = {
             res.status(200).send('Course deleted successfully');
         } catch (err) {
             res.status(400).send({message: err});
+        }
+    },
+    increaseUserSemester: async (req, res) => {
+        try {
+            await User.updateOne(
+                {albumNo: req.body.albumNo},
+                {$inc: {[`semesters.${req.body.index}`] : 1}}
+            );
+            res.status(200).send('Semester increased successfully');
+        } catch (err) {
+            res.status(400).send({message: 'Semester increase failed'});
         }
     }
 }
