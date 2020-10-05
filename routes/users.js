@@ -26,6 +26,10 @@ router.get('/findByUniversity/:universityName', userController.findByUniversity)
 
 router.get('/findByCourse/:courseName', userController.findByCourse);
 
+router.post('/addUserCourse', userController.addUserCourse);
+
+router.post('/deleteUserCourse', userController.deleteUserCourse);
+
 //just put verifyToken inside router to protect route with JWT
 
 module.exports = router;

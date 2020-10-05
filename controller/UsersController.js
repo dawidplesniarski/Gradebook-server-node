@@ -158,6 +158,43 @@ const UserController = {
         } catch (err) {
             res.status(404).send(err);
         }
+    },
+    addUserCourse: async (req, res) => {    // add user course with first semester
+        try {
+            await User.updateOne(
+                {albumNo: req.body.albumNo},
+                {$push: {courseId: req.body.courseId, semesters: 1}}
+            );
+            res.status(200).send('Course added successfully');
+        } catch (err) {
+            res.status(400).send({message: err})
+        }
+    },
+    deleteUserCourse: async (req, res) => {
+        try {
+            // TODO: This function need to simplify and optimize.
+            await User.updateOne(
+                {albumNo: req.body.albumNo},
+                {$unset: { [`courseId.${req.body.index}`]: 1}}
+            );
+            await User.updateOne(
+                {albumNo: req.body.albumNo},
+                {$pull: {courseId: null}},
+                {multi: true}
+            );
+            await User.updateOne(
+                {albumNo: req.body.albumNo},
+                {$unset: { [`semesters.${req.body.index}`]: 1}}
+            );
+            await User.updateOne(
+                {albumNo: req.body.albumNo},
+                {$pull: {semesters: null}},
+                {multi: true}
+            );
+            res.status(200).send('Course deleted successfully');
+        } catch (err) {
+            res.status(400).send({message: err});
+        }
     }
 }
 
