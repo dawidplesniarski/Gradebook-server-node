@@ -2,7 +2,7 @@ const mongoose = require('mongoose'), Schema = mongoose.Schema;
 
 const SubjectDetails = Schema({
     ects: {
-        type: String,
+        type: Number,
         required: true
     },
     hours: {
