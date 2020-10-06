@@ -29,7 +29,7 @@ const SubjectsController = {
             const subjectDetails = await SubjectDetails.findOne({subjectName: subject.subjectName});
             const subjectWithDetails = {
                 subject: subject,
-                subjectDetails : subjectDetails
+                subjectDetails: subjectDetails
             }
             res.status(200).send(subjectWithDetails);
         } catch (err) {
@@ -37,20 +37,20 @@ const SubjectsController = {
         }
     },
     findByName: async (req, res) => {
-        try{
+        try {
             const subject = await Subject.findOne({subjectName: {$regex: new RegExp(req.params.subjectName, "i")}});
-            const subjectDetails = await SubjectDetails.findOne({subjectName : subject.subjectName});
+            const subjectDetails = await SubjectDetails.findOne({subjectName: subject.subjectName});
             const subjectWithDetails = {
                 subject: subject,
                 subjectDetails: subjectDetails
             }
             res.status(200).send(subjectWithDetails);
-        }catch(err){
+        } catch (err) {
             res.status(404).send({message: err});
         }
     },
     totalEcts: async (req, res) => {
-        try{
+        try {
             if (req.params.semesterNumber < 1) {
                 throw new Error('Wrong semester number typed');
             }
@@ -59,18 +59,25 @@ const SubjectsController = {
 
             const subjectsDetails = await SubjectDetails.find({"subjectName": {$in: subjectsArray}}); //lista przedmiotow nalezaca do w.w tablicy
 
-            const grades = await Grades.find({grade : 2}, {studentAlbum: "30785"}).populate('subject'); //lista ocen 2.0 danego studenta
-
+            const grades = await Grades.find({grade: 2}, {studentAlbum: "30785"}).populate('subject'); //lista ocen 2.0 danego studenta
             //TODO: porównaj które z grades należą do subjectsArray a jak należą to nie podliczaj ich do całości ects
 
-            let ects = 0;
-            subjectsDetails.forEach(elem =>{
-                ects += elem.ects;
+            var negativeGradesCategories = [];
+            grades.forEach(elem => {
+                negativeGradesCategories.push(elem.subject.subjectName);
             });
-            res.status(200).send({ects: ects});
+            const negativeGradesCategoriesNoDuplicate = negativeGradesCategories.filter((v, i) => negativeGradesCategories.indexOf(v) === i);
+            let ects = 0;
+            let totalEcts = 0;
+            subjectsDetails.forEach(elem => {
+                if (!negativeGradesCategoriesNoDuplicate.includes(elem.subjectName)) {
+                    ects += elem.ects;
+                }
+                totalEcts += elem.ects;
+            });
+            res.status(200).send({ects: `${ects}/${totalEcts}`});
         } catch (err) {
-            //res.status(400).send({err});
-            res.json(err);
+            res.status(400).send({err});
         }
     }
 };
