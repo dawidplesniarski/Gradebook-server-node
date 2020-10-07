@@ -54,12 +54,12 @@ const SubjectsController = {
             if (req.params.semesterNumber < 1) {
                 throw new Error('Wrong semester number typed');
             }
-            const semesterSubjects = await CourseSubjects.findOne({course: req.body.courseName});
-            const subjectsArray = semesterSubjects.semesters[req.body.semesterNumber - 1]; // lista przedmiotow z kierunku i semestru
+            const semesterSubjects = await CourseSubjects.findOne({course: req.params.courseName});
+            const subjectsArray = semesterSubjects.semesters[req.params.semesterNumber - 1]; // lista przedmiotow z kierunku i semestru
 
             const subjectsDetails = await SubjectDetails.find({"subjectName": {$in: subjectsArray}}); //lista przedmiotow nalezaca do w.w tablicy
 
-            const grades = await Grades.find({grade: 2, studentAlbum: req.body.studentAlbum}).populate('subject'); //lista ocen 2.0 danego studenta
+            const grades = await Grades.find({grade: 2, studentAlbum: req.params.studentAlbum}).populate('subject'); //lista ocen 2.0 danego studenta
 
             var negativeGradesCategories = [];
 
