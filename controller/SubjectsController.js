@@ -54,19 +54,21 @@ const SubjectsController = {
             if (req.params.semesterNumber < 1) {
                 throw new Error('Wrong semester number typed');
             }
-            const semesterSubjects = await CourseSubjects.findOne({course: req.params.courseName});
-            const subjectsArray = semesterSubjects.semesters[req.params.semesterNumber - 1]; // lista przedmiotow z kierunku i semestru
+            const semesterSubjects = await CourseSubjects.findOne({course: req.body.courseName});
+            const subjectsArray = semesterSubjects.semesters[req.body.semesterNumber - 1]; // lista przedmiotow z kierunku i semestru
 
             const subjectsDetails = await SubjectDetails.find({"subjectName": {$in: subjectsArray}}); //lista przedmiotow nalezaca do w.w tablicy
 
-            const grades = await Grades.find({grade: 2}, {studentAlbum: "30785"}).populate('subject'); //lista ocen 2.0 danego studenta
-            //TODO: porównaj które z grades należą do subjectsArray a jak należą to nie podliczaj ich do całości ects
+            const grades = await Grades.find({grade: 2, studentAlbum: req.body.studentAlbum}).populate('subject'); //lista ocen 2.0 danego studenta
 
             var negativeGradesCategories = [];
+
             grades.forEach(elem => {
-                negativeGradesCategories.push(elem.subject.subjectName);
+                negativeGradesCategories.push(elem.subject.subjectName); // tworzymy tablicę przedmiotów z ktorych album ma 2.0
             });
+
             const negativeGradesCategoriesNoDuplicate = negativeGradesCategories.filter((v, i) => negativeGradesCategories.indexOf(v) === i);
+
             let ects = 0;
             let totalEcts = 0;
             subjectsDetails.forEach(elem => {
@@ -75,7 +77,7 @@ const SubjectsController = {
                 }
                 totalEcts += elem.ects;
             });
-            res.status(200).send({ects: `${ects}/${totalEcts}`});
+            res.status(200).send({ects: ects, totalEcts: totalEcts});
         } catch (err) {
             res.status(400).send({err});
         }

@@ -10,6 +10,6 @@ router.get('/findById/:subjectId', subjectsController.findById);
 
 router.get('/findByName/:subjectName', subjectsController.findByName);
 
-router.get('/totalEcts/:courseName/:semesterNumber', subjectsController.totalEcts);
+router.get('/totalEcts', subjectsController.totalEcts);
 
 module.exports = router;
