@@ -6,4 +6,6 @@ router.get('/findByName/:subjectName', subjectDetailsController.findBySubjectNam
 
 router.post('/addSubjectDetails', subjectDetailsController.addSubjectDetails);
 
+router.get('/findAll', subjectDetailsController.findAllSubjectDetails);
+
 module.exports = router;

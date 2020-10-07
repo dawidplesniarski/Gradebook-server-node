@@ -32,6 +32,8 @@ router.post('/deleteUserCourse', userController.deleteUserCourse);
 
 router.post('/increaseSemester', userController.increaseUserSemester);
 
+router.post('/decreaseSemester', userController.decreaseSemester);
+
 //just put verifyToken inside router to protect route with JWT
 
 module.exports = router;

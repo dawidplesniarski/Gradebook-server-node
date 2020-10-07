@@ -3,7 +3,7 @@ const SubjectDetails = require('../models/SubjectDetails');
 const SubjectDetailsController = {
     findBySubjectName: async (req, res) => {
         try {
-            const subjectDetails = await SubjectDetails({subjectName : req.params.subjectName});
+            const subjectDetails = await SubjectDetails.findOne({subjectName: req.params.subjectName});
             res.status(200).send(subjectDetails);
         } catch (err) {
             res.status(404).send({message: "Error"});
@@ -16,11 +16,19 @@ const SubjectDetailsController = {
             type: req.body.type,
             subjectName: req.body.subjectName
         });
-        try{
+        try {
             const savedSubjectDetails = await subjectDetails.save();
             res.status(201).send(savedSubjectDetails);
-        }catch(err){
+        } catch (err) {
             res.status(404).send('Error');
+        }
+    },
+    findAllSubjectDetails: async (req, res) => {
+        try {
+            const subjectDetails = await SubjectDetails.find();
+            res.status(200).send(subjectDetails);
+        } catch (err) {
+            res.status(400).send(err);
         }
     }
 };
