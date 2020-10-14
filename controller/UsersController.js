@@ -159,6 +159,14 @@ const UserController = {
             res.status(404).send(err);
         }
     },
+    findByUniversityAndCourse: async (req, res) => {
+        try {
+            const students = await User.find({universityId: req.params.universityId, courseId: req.params.courseId}).populate(['universityId','courseId']);
+            res.status(200).send(students)
+        } catch (err) {
+          res.status(404).send(err);
+        }
+    },
     addUserCourse: async (req, res) => {    // add user course with first semester
         try {
             await User.updateOne(
@@ -200,7 +208,7 @@ const UserController = {
         try {
             await User.updateOne(
                 {albumNo: req.body.albumNo},
-                {$inc: {[`semesters.${req.body.index}`] : 1}}
+                {$inc: {[`semesters.${req.body.index}`]: 1}}
             );
             res.status(200).send('Semester increased successfully');
         } catch (err) {
@@ -211,7 +219,7 @@ const UserController = {
         try {
             await User.updateOne(
                 {albumNo: req.body.albumNo},
-                {$inc: {[`semesters.${req.body.index}`] : -1}}
+                {$inc: {[`semesters.${req.body.index}`]: -1}}
             );
             res.status(200).send({message: 'Semester decreased successfully'});
         } catch (err) {
