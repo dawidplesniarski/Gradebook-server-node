@@ -161,7 +161,7 @@ const UserController = {
     },
     findByUniversityAndCourse: async (req, res) => {
         try {
-            const students = await User.find({universityId: req.params.universityId, courseId: req.params.courseId});
+            const students = await User.find({universityId: req.params.universityId, courseId: req.params.courseId}).populate(['universityId','courseId']);
             res.status(200).send(students)
         } catch (err) {
           res.status(404).send(err);
