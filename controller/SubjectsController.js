@@ -2,6 +2,7 @@ const Subject = require('../models/Subject');
 const SubjectDetails = require('../models/SubjectDetails');
 const CourseSubjects = require('../models/CourseSubjects');
 const Grades = require('../models/Grades');
+const User = require('../models/User');
 
 const SubjectsController = {
     findAll: async (req, res) => {
@@ -80,6 +81,18 @@ const SubjectsController = {
             res.status(200).send({ects: ects, totalEcts: totalEcts});
         } catch (err) {
             res.status(400).send({err});
+        }
+    },
+    findByStudent: async (req, res) => {
+        try {
+            const student = await User.findOne({albumNo: req.params.albumNo}).populate('courseId');
+            const index = student.courseId.findIndex(e => e.courseName === req.params.courseName);
+            const studentSemester = student.semesters[index];
+            const courseSubjects = await CourseSubjects.findOne({course: req.params.courseName});
+            const semesterSubjects = courseSubjects.semesters[studentSemester - 1];
+            res.status(200).send(semesterSubjects);
+        } catch (err) {
+            res.status(405).send({err});
         }
     }
 };

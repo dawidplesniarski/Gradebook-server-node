@@ -12,4 +12,6 @@ router.get('/findByName/:subjectName', subjectsController.findByName);
 
 router.get('/totalEcts/:courseName/:semesterNumber/:studentAlbum', subjectsController.totalEcts);
 
+router.get('/findByStudent/:courseName/:albumNo', subjectsController.findByStudent);
+
 module.exports = router;
