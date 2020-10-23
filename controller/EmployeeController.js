@@ -41,7 +41,7 @@ const EmployeeController = {
     },
     findAllEmployees: async (req, res) => {
         try {
-            const employees = await Employee.find().populate('universityId');
+            const employees = await Employee.find().populate(['universityId', 'courseId', 'subjectId']);
             res.status(200).send(employees);
         } catch (err) {
             res.status(404).send({message: err});

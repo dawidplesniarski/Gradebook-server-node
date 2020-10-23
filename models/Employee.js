@@ -31,6 +31,18 @@ const Employee = mongoose.Schema({
             ref: 'University'
         }
     ],
+    courseId: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Course'
+        }
+    ],
+    subjectId: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Subject'
+        }
+    ],
     email: {
         type: String,
         required: true
