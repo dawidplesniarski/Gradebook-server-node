@@ -49,7 +49,7 @@ const EmployeeController = {
     },
     loginEmployee: async (req, res) => {
         try {
-            const employee = await Employee.findOne({login: req.body.login}).populate('universityId');
+            const employee = await Employee.findOne({login: req.body.login}).populate(['universityId', 'courseId', 'subjectId']);
 
             const validPassword = await bcrypt.compare(
                 req.body.password,
