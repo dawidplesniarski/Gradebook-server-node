@@ -29,6 +29,8 @@ const EmployeeController = {
             login: req.body.login,
             password: hashedPassword,
             universityId: req.body.universityId,
+            courseId: req.body.courseId,
+            subjectId: req.body.subjectId,
             email: req.body.email,
             imageUrl: req.body.imageUrl
         });

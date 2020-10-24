@@ -13,4 +13,6 @@ router.get('/findLatest/:studentAlbum', gradesController.findLatest);
 
 router.post('/addTestGrade', gradesController.addTestGrade);
 
+router.delete('/deleteGrade/:id', gradesController.deleteGradeById);
+
 module.exports = router;

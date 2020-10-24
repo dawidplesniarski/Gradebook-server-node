@@ -53,6 +53,15 @@ const GradesController = {
         } catch (err) {
             res.status(404).send({message: err});
         }
+    },
+    deleteGradeById: async (req, res) => {
+        Grades.findByIdAndDelete(req.params.id, (err) => {
+            if (err) {
+                res.status(404).send('Error when delete grade');
+            } else {
+                res.status(200).send(`Grade with id ${req.params.id} deleted successfully`)
+            }
+        });
     }
 }
 module.exports = GradesController;
