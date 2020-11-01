@@ -59,7 +59,7 @@ const EmployeeController = {
             );
 
             if (validPassword) {
-                jwt.sign({employee}, 'secretKey', (err, token) => {
+                jwt.sign({employee}, 'secretkey', (err, token) => {
                     res.json({
                         employee: employee,
                         token: token
