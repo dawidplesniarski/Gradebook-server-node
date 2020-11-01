@@ -1,11 +1,17 @@
+const jwt = require('jsonwebtoken');
+
 function verifyToken(req, res, next){
-    const bearerHeader = req.headers['authorization'];
+    const bearerHeader = req.header('Authorization');
     if(typeof bearerHeader !== 'undefined'){
-        const bearer = bearerHeader.split(' ');
-        req.token = bearer[1];
-        next();
+        const token = bearerHeader.split(' ')[1];
+        jwt.verify(token, 'secretkey', (error, user) => {
+            if(error) {
+                return res.status(403).send('Forbidden route');
+            }
+            next();
+        })
     } else {
-        res.sendStatus(403);
+        return res.status(404).send('No token provided');
     }
 }
 
