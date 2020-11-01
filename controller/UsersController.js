@@ -35,8 +35,6 @@ const UserController = {
                     res.json({
                         user: user,
                         token: token,
-                        //course: courseName,
-                        //university: universityName
                     });
                 })
             } else {
@@ -161,10 +159,13 @@ const UserController = {
     },
     findByUniversityAndCourse: async (req, res) => {
         try {
-            const students = await User.find({universityId: req.params.universityId, courseId: req.params.courseId}).populate(['universityId','courseId']);
+            const students = await User.find({
+                universityId: req.params.universityId,
+                courseId: req.params.courseId
+            }).populate(['universityId', 'courseId']);
             res.status(200).send(students)
         } catch (err) {
-          res.status(404).send(err);
+            res.status(404).send(err);
         }
     },
     addUserCourse: async (req, res) => {    // add user course with first semester
@@ -224,6 +225,25 @@ const UserController = {
             res.status(200).send({message: 'Semester decreased successfully'});
         } catch (err) {
             res.status(400).send({message: 'Semester decrease failed'});
+        }
+    },
+    editUserData: async (req, res) => {
+        try {
+            const user = await User.findOneAndUpdate(
+                {_id: req.params.userId},
+                {
+                    name: req.body.name,
+                    lastName: req.body.lastName,
+                    albumNo: req.body.albumNo,
+                    isEnabled: req.body.enabled,
+                    login: req.body.login,
+                    imageUrl: req.body.imageUrl,
+                    email: req.body.email,
+                },
+                {useFindAndModify: false});
+            res.status(200).send(user);
+        } catch (err) {
+            res.status(404).send(err);
         }
     }
 }

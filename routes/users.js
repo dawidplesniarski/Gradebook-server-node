@@ -12,7 +12,7 @@ router.post('/login', userController.login);
 
 router.delete('/delete/:userId', userController.deleteUserByID);
 
-router.post('/addUser', userController.addUser);
+router.post('/addUser', verifyToken, userController.addUser);
 
 router.put('/changePassword/:userId', userController.changePassword);
 
@@ -34,7 +34,9 @@ router.post('/increaseSemester', userController.increaseUserSemester);
 
 router.post('/decreaseSemester', userController.decreaseSemester);
 
-router.get('/findByUniversityAndCourse/:universityId/:courseId', userController.findByUniversityAndCourse)
+router.get('/findByUniversityAndCourse/:universityId/:courseId', userController.findByUniversityAndCourse);
+
+router.put('/editUserData/:userId', verifyToken, userController.editUserData)
 
 //just put verifyToken inside router to protect route with JWT
 
