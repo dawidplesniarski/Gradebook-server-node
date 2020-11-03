@@ -15,4 +15,6 @@ router.post('/addTestGrade', gradesController.addTestGrade);
 
 router.delete('/deleteGrade/:id', gradesController.deleteGradeById);
 
+router.get('/findBySemesterAndSubject/:universityId/:courseId/:semester/:subject', gradesController.findBySemesterAndSubject);
+
 module.exports = router;

@@ -1,5 +1,7 @@
 const Grades = require('../models/Grades');
 const Subject = require('../models/Subject');
+const User = require('../models/User');
+const Course = require('../models/Course');
 
 const GradesController = {
     findAll: async (req, res) => {
@@ -62,6 +64,56 @@ const GradesController = {
                 res.status(200).send(`Grade with id ${req.params.id} deleted successfully`)
             }
         });
+    },
+    findBySemesterAndSubject: async (req, res) => {
+        try {
+            const {courseName} = await Course.findById(req.params.courseId); // pobieram nazwę kierunku po ID
+            const semester = req.params.semester;
+            const subject = req.params.subject;
+            const students = await User.find({
+                universityId: req.params.universityId,
+                courseId: req.params.courseId
+            }).populate(['universityId', 'courseId']);  // szukam studentów po kierunku i uczelni
+
+            const studentsFilteredBySemesters = students.
+            filter(student => student.semesters[student.courseId.
+            findIndex(i => i.courseName === courseName)] == semester);  //studenci przefiltrowani po kierunku uczelni i semestrze
+
+            const studentAlbums = [];
+            studentsFilteredBySemesters.forEach(student => {
+                studentAlbums.push(student.albumNo);
+            });
+
+            const gradesMatchingStudents = await Grades.find({studentAlbum: {$in: studentAlbums}}).populate('subject');
+            const gradesFilteredBySubject = gradesMatchingStudents.filter(grade => grade.subject.subjectName === subject);
+
+
+            function calculateAverage(album) {
+                let temp = 0;
+                let counter = 0;
+                gradesFilteredBySubject.filter(g => g.studentAlbum === album).forEach(grade => {
+                    temp += grade.grade;
+                    counter ++;
+                });
+                const result = temp / counter;
+
+                return result.toFixed(2);
+            }
+            const arrayToExportToPDF = [];
+
+            studentsFilteredBySemesters.forEach(student => {
+               arrayToExportToPDF.push({
+                   name: student.name,
+                   lastName: student.lastName,
+                   album: student.albumNo,
+                   average: calculateAverage(student.albumNo)
+               })
+            });
+
+            res.status(200).send(arrayToExportToPDF);
+        } catch (err) {
+            res.status(404).send(err);
+        }
     }
 }
 module.exports = GradesController;
