@@ -2,6 +2,7 @@ const Grades = require('../models/Grades');
 const Subject = require('../models/Subject');
 const User = require('../models/User');
 const Course = require('../models/Course');
+const _ = require('lodash');
 
 const GradesController = {
     findAll: async (req, res) => {
@@ -89,24 +90,46 @@ const GradesController = {
 
 
             function calculateAverage(album) {
-                let temp = 0;
-                let counter = 0;
-                gradesFilteredBySubject.filter(g => g.studentAlbum === album).forEach(grade => {
-                    temp += grade.grade;
-                    counter ++;
-                });
-                const result = temp / counter;
+                let temp = [];
 
-                return result.toFixed(2);
+                gradesFilteredBySubject.filter(g => g.studentAlbum === album).forEach(grade => {
+                    temp.push(grade.grade);
+                });
+                return Math.round((_.sum(temp) / temp.length) / 0.5) * 0.5;
+            }
+            function getGradeName(grade) {
+                const gradesNames = {
+                    NDST: "ndst",
+                    DST: "dst",
+                    pDST: "+dst",
+                    DB: "db",
+                    pDB: "+db",
+                    BDB: "bdb"
+                }
+                switch(grade) {
+                    case 2:
+                        return gradesNames.NDST;
+                    case 3:
+                       return gradesNames.DST;
+                    case 3.5:
+                        return gradesNames.pDST;
+                    case 4:
+                        return gradesNames.DB;
+                    case 4.5:
+                        return gradesNames.pDB
+                    case 5:
+                        return gradesNames.BDB;
+                    default:
+                        return '';
+                }
             }
             const arrayToExportToPDF = [];
-
             studentsFilteredBySemesters.forEach(student => {
                arrayToExportToPDF.push({
                    name: student.name,
                    lastName: student.lastName,
                    album: student.albumNo,
-                   average: calculateAverage(student.albumNo)
+                   average: `${calculateAverage(student.albumNo)} ${getGradeName(calculateAverage(student.albumNo))}`
                })
             });
 
