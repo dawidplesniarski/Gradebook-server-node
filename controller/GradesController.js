@@ -129,7 +129,7 @@ const GradesController = {
                    name: student.name,
                    lastName: student.lastName,
                    album: student.albumNo,
-                   average: `${calculateAverage(student.albumNo)} ${getGradeName(calculateAverage(student.albumNo))}`
+                   average: `${calculateAverage(student.albumNo).toFixed(1)} ${getGradeName(calculateAverage(student.albumNo))}`
                })
             });
 
