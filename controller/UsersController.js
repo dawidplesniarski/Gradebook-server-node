@@ -181,22 +181,24 @@ const UserController = {
     },
     deleteUserCourse: async (req, res) => {
         try {
-            // TODO: This function need to simplify and optimize.
+            const user = await User.findById(req.body.userId).populate('courseId');
+            const index = user.courseId.findIndex(i => i.courseName === req.body.courseName);
+
             await User.updateOne(
-                {albumNo: req.body.albumNo},
-                {$unset: {[`courseId.${req.body.index}`]: 1}}  //delete course ID at specific index
+                {_id: req.body.userId},
+                {$unset: {[`courseId.${index}`]: 1}}  //delete course ID at specific index
             );
             await User.updateOne(
-                {albumNo: req.body.albumNo},
+                {_id: req.body.userId},
                 {$pull: {courseId: null}},
                 {multi: true}
             );
             await User.updateOne(
-                {albumNo: req.body.albumNo},
-                {$unset: {[`semesters.${req.body.index}`]: 1}} //delete semester at the same index as course ID
+                {_id: req.body.userId},
+                {$unset: {[`semesters.${index}`]: 1}} //delete semester at the same index as course ID
             );
             await User.updateOne(
-                {albumNo: req.body.albumNo},
+                {_id: req.body.userId},
                 {$pull: {semesters: null}},
                 {multi: true}
             );
