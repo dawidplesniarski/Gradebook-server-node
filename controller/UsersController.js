@@ -207,9 +207,11 @@ const UserController = {
     },
     increaseUserSemester: async (req, res) => {
         try {
+            const user = await User.findById(req.body.userId).populate('courseId');
+            const index = user.courseId.findIndex(i => i.courseName === req.body.courseName);
             await User.updateOne(
-                {albumNo: req.body.albumNo},
-                {$inc: {[`semesters.${req.body.index}`]: 1}}
+                {_id: req.body.userId},
+                {$inc: {[`semesters.${index}`]: 1}}
             );
             res.status(200).send('Semester increased successfully');
         } catch (err) {
@@ -218,10 +220,14 @@ const UserController = {
     },
     decreaseSemester: async (req, res) => {
         try {
-            await User.updateOne(
-                {albumNo: req.body.albumNo},
-                {$inc: {[`semesters.${req.body.index}`]: -1}}
-            );
+            const user = await User.findById(req.body.userId).populate('courseId');
+            const index = user.courseId.findIndex(i => i.courseName === req.body.courseName);
+            if(user.semesters[index] > 1) {
+                await User.updateOne(
+                    {_id: req.body.userId},
+                    {$inc: {[`semesters.${index}`]: -1}}
+                );
+            }
             res.status(200).send({message: 'Semester decreased successfully'});
         } catch (err) {
             res.status(400).send({message: 'Semester decrease failed'});
