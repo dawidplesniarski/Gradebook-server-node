@@ -26,13 +26,13 @@ router.get('/findByUniversity/:universityName', userController.findByUniversity)
 
 router.get('/findByCourse/:courseName', userController.findByCourse);
 
-router.post('/addUserCourse', userController.addUserCourse);
+router.post('/addUserCourse', verifyToken, userController.addUserCourse);
 
-router.post('/deleteUserCourse', userController.deleteUserCourse);
+router.post('/deleteUserCourse', verifyToken, userController.deleteUserCourse);
 
-router.post('/increaseSemester', userController.increaseUserSemester);
+router.post('/increaseSemester', verifyToken, userController.increaseUserSemester);
 
-router.post('/decreaseSemester', userController.decreaseSemester);
+router.post('/decreaseSemester', verifyToken, userController.decreaseSemester);
 
 router.get('/findByUniversityAndCourse/:universityId/:courseId', userController.findByUniversityAndCourse);
 
