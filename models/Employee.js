@@ -17,6 +17,10 @@ const Employee = mongoose.Schema({
         type: Boolean,
         required: true
     },
+    isEnabled: {
+        type: Boolean,
+        required: true
+    },
     login: {
         type: String,
         required: true

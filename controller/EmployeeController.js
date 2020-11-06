@@ -26,6 +26,7 @@ const EmployeeController = {
             name: req.body.name,
             lastName: req.body.lastName,
             isAdmin: req.body.isAdmin,
+            isEnabled: req.body.enabled,
             login: req.body.login,
             password: hashedPassword,
             universityId: req.body.universityId,
