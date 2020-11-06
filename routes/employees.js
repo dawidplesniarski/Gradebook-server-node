@@ -17,4 +17,12 @@ router.put('/addEmployeeUniversity', verifyToken, employeeController.addEmployee
 
 router.put('/deleteEmployeeUniversity', verifyToken, employeeController.deleteEmployeeUniversity);
 
+router.put('/addEmployeeCourse', verifyToken, employeeController.addEmployeeCourse);
+
+router.put('/deleteEmployeeCourse', verifyToken, employeeController.deleteEmployeeCourse);
+
+router.put('/addEmployeeSubject', verifyToken, employeeController.addEmployeeSubject);
+
+router.put('/deleteEmployeeSubject', verifyToken, employeeController.deleteEmployeeSubject);
+
 module.exports = router;

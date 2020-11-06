@@ -110,15 +110,86 @@ const EmployeeController = {
     },
     deleteEmployeeUniversity: async (req, res) => {
         try {
-            await Employee.updateOne(
-                {_id: req.body.employeeId},
-                {$pull: {universityId: req.body.universityId}}
-            );
-            res.status(200).send('University deleted successfully');
+            const employee = await Employee.findById(req.body.employeeId);
+            if(employee.universityId.includes(req.body.universityId)){
+                await Employee.updateOne(
+                    {_id: req.body.employeeId},
+                    {$pull: {universityId: req.body.universityId}}
+                );
+                res.status(200).send('University deleted successfully');
+            } else {
+                res.status(400).send(`University with id ${req.body.universityId} not exists`);
+            }
         } catch (err) {
             res.status(400).send({message: err});
         }
-    }
+    },
+    addEmployeeCourse: async (req, res) => {
+        try {
+            const employee = await Employee.findById(req.body.employeeId);
+
+            if(!employee.courseId.includes(req.body.courseId)) {
+                await Employee.updateOne(
+                    {_id: req.body.employeeId},
+                    {$push: {courseId: req.body.courseId}}
+                );
+                res.status(200).send('Course added successfully');
+            } else {
+                res.status(409).send(`Course with id ${req.body.courseId} already exists`);
+            }
+        } catch (err) {
+            res.status(400).send({message: err});
+        }
+    },
+    deleteEmployeeCourse: async (req, res) => {
+        try {
+            const employee = await Employee.findById(req.body.employeeId);
+            if(employee.courseId.includes(req.body.courseId)){
+                await Employee.updateOne(
+                    {_id: req.body.employeeId},
+                    {$pull: {courseId: req.body.courseId}}
+                );
+                res.status(200).send('Course deleted successfully');
+            } else {
+                res.status(400).send(`Course with id ${req.body.courseId} not exists`);
+            }
+        } catch (err) {
+            res.status(400).send({message: err});
+        }
+    },
+    addEmployeeSubject: async (req, res) => {
+        try {
+            const employee = await Employee.findById(req.body.employeeId);
+
+            if(!employee.subjectId.includes(req.body.subjectId)) {
+                await Employee.updateOne(
+                    {_id: req.body.employeeId},
+                    {$push: {subjectId: req.body.subjectId}}
+                );
+                res.status(200).send('Subject added successfully');
+            } else {
+                res.status(409).send(`Subject with id ${req.body.subjectId} already exists`);
+            }
+        } catch (err) {
+            res.status(400).send({message: err});
+        }
+    },
+    deleteEmployeeSubject: async (req, res) => {
+        try {
+            const employee = await Employee.findById(req.body.employeeId);
+            if(employee.subjectId.includes(req.body.subjectId)){
+                await Employee.updateOne(
+                    {_id: req.body.employeeId},
+                    {$pull: {subjectId: req.body.subjectId}}
+                );
+                res.status(200).send('Subject deleted successfully');
+            } else {
+                res.status(400).send(`Subject with id ${req.body.subjectId} not exists`);
+            }
+        } catch (err) {
+            res.status(400).send({message: err});
+        }
+    },
 };
 
 module.exports = EmployeeController;
