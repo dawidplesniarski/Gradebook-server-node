@@ -72,6 +72,52 @@ const EmployeeController = {
         } catch (err) {
             res.status(403).send({message: err});
         }
+    },
+    editEmployeeData: async (req, res) => {
+        try {
+            const employee = await Employee.findOneAndUpdate({_id: req.params.employeeId},
+                {
+                    academicTitle: req.body.academicTitle,
+                    name: req.body.name,
+                    lastName: req.body.lastName,
+                    isAdmin: req.body.isAdmin,
+                    isEnabled: req.body.enabled,
+                    login: req.body.login,
+                    imageUrl: req.body.imageUrl,
+                    email: req.body.email
+                }, {useFindAndModify: false});
+            res.status(200).send(employee);
+        } catch (err) {
+            res.status(404).send(err);
+        }
+    },
+    addEmployeeUniversity: async (req, res) => {
+        try {
+            const employee = await Employee.findById(req.body.employeeId);
+
+            if(!employee.universityId.includes(req.body.universityId)) {
+                await Employee.updateOne(
+                    {_id: req.body.employeeId},
+                    {$push: {universityId: req.body.universityId}}
+                );
+                res.status(200).send('University added successfully');
+            } else {
+                res.status(409).send(`University with id ${req.body.universityId} already exists`);
+            }
+        } catch (err) {
+            res.status(400).send({message: err});
+        }
+    },
+    deleteEmployeeUniversity: async (req, res) => {
+        try {
+            await Employee.updateOne(
+                {_id: req.body.employeeId},
+                {$pull: {universityId: req.body.universityId}}
+            );
+            res.status(200).send('University deleted successfully');
+        } catch (err) {
+            res.status(400).send({message: err});
+        }
     }
 };
 
