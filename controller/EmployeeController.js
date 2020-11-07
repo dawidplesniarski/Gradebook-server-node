@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const EmployeeController = {
     findEmployeeById: async (req, res) => {
         try {
-            const foundEmployee = await Employee.findById(req.params.employeeId).populate('universityId');
+            const foundEmployee = await Employee.findById(req.params.employeeId).populate(['universityId', 'subjectId', 'courseId']);
             res.status(200).send(foundEmployee);
         } catch (err) {
             res.status(404).send({message: err});
