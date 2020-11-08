@@ -98,7 +98,7 @@ const SubjectsController = {
     addSubjectWithDetails: async (req, res) => {
         try {
             const subject = await Subject.findOne({subjectName: req.body.subjectName});
-            if(!subject) {
+            if (!subject) {
                 const newSubject = new Subject({
                     subjectName: req.body.subjectName
                 });
@@ -116,6 +116,26 @@ const SubjectsController = {
             }
         } catch (err) {
             res.status(400).send({message: err});
+        }
+    },
+    editSubjectWithDetails: async (req, res) => {
+        try {
+            const subject = await Subject.findOne({subjecName: req.body.newSubjectName});
+            if (!subject) {
+                await Subject.findOneAndUpdate({subjectName: req.body.subjectName}, {
+                        subjectName: req.body.newSubjectName}, {useFindAndModify: false});
+                await SubjectDetails.findOneAndUpdate({subjectName: req.body.subjectName},{
+                    ects: req.body.ects,
+                    hours: req.body.hours,
+                    type: req.body.type,
+                    subjectName: req.body.newSubjectName
+                },{useFindAndModify: false});
+                res.status(200).send('Subject and SubjectDetails updated')
+            } else {
+                res.status(409).send(`Subject with name ${req.body.subjectName} already exists`);
+            }
+        } catch (err) {
+
         }
     }
 };

@@ -17,4 +17,6 @@ router.get('/findByStudent/:courseName/:albumNo', subjectsController.findByStude
 
 router.post('/addSubjectWithDetails', verifyToken, subjectsController.addSubjectWithDetails);
 
+router.put('/editSubjectWithDetails', verifyToken, subjectsController.editSubjectWithDetails);
+
 module.exports = router;
