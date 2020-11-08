@@ -94,6 +94,29 @@ const SubjectsController = {
         } catch (err) {
             res.status(405).send({err});
         }
+    },
+    addSubjectWithDetails: async (req, res) => {
+        try {
+            const subject = await Subject.findOne({subjectName: req.body.subjectName});
+            if(!subject) {
+                const newSubject = new Subject({
+                    subjectName: req.body.subjectName
+                });
+                const newSubjectDetails = new SubjectDetails({
+                    ects: req.body.ects,
+                    hours: req.body.hours,
+                    type: req.body.type,
+                    subjectName: req.body.subjectName
+                });
+                await newSubject.save(newSubject);
+                await newSubjectDetails.save(newSubjectDetails);
+                res.status(201).send('Subject and subjects details created successfully')
+            } else {
+                res.status(409).send(`Subject with name ${req.body.subjectName} already exists!`)
+            }
+        } catch (err) {
+            res.status(400).send({message: err});
+        }
     }
 };
 
