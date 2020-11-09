@@ -15,4 +15,8 @@ router.get('/findCourseWithSubjects/:courseName', coursesController.findCourseWi
 
 router.put('/editCourseData', verifyToken, coursesController.editCourseData);
 
+router.put('/addSubjectToSemester', verifyToken, coursesController.addSubjectToSemester);
+
+router.put('/deleteSubjectFromSemester', verifyToken, coursesController.deleteSubjectFromSemester);
+
 module.exports = router;

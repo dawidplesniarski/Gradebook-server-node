@@ -86,6 +86,40 @@ const CoursesController = {
         } catch (err) {
             res.status(400).send(err);
         }
+    },
+    addSubjectToSemester: async (req, res) => {
+        try {
+            const foundCourse = await CourseSubjects.findOne({course: req.body.courseName});
+            if (foundCourse) {
+                const index = req.body.semester;
+                await CourseSubjects.updateOne({course: req.body.courseName},{
+                        $push: {[`semesters.${index}`] : req.body.newSubject}
+                    }
+                );
+                res.status(200).send('Subject added successfully');
+            } else {
+                res.status(404).send(`Course with name ${req.body.courseName} not exists`)
+            }
+        } catch (err) {
+            res.status(400).send(err);
+        }
+    },
+    deleteSubjectFromSemester: async (req, res) => {
+        try {
+            const foundCourse = await CourseSubjects.findOne({course: req.body.courseName});
+            if (foundCourse) {
+                const index = req.body.semester;
+                await CourseSubjects.updateOne({course: req.body.courseName},{
+                        $pull: {[`semesters.${index}`] : req.body.subjectToRemove}
+                    }
+                );
+                res.status(200).send('Subject removed successfully');
+            } else {
+                res.status(404).send(`Course with name ${req.body.courseName} not exists`)
+            }
+        } catch (err) {
+            res.status(400).send(err);
+        }
     }
 }
 
