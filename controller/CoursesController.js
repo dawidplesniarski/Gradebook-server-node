@@ -27,7 +27,7 @@ const CoursesController = {
             const course = await Course.findById(req.params.courseId);
             res.status(200).send(course);
         } catch (err) {
-            res.json({message: err})
+            res.status(404).send(err);
         }
     },
     addCourseWithSubjects: async (req, res) => {
@@ -56,10 +56,33 @@ const CoursesController = {
         try {
             const course = await Course.findOne({courseName: req.params.courseName});
             const courseSubjects = await CourseSubjects.findOne({course: req.params.courseName});
-            res.status(200).send({
-                course: course,
-                courseSubjects: courseSubjects
-            });
+            if (course && courseSubjects) {
+                res.status(200).send({
+                    course: course,
+                    courseSubjects: courseSubjects
+                });
+            } else {
+                res.status(404).send('No course found')
+            }
+        } catch (err) {
+            res.status(400).send(err);
+        }
+    },
+    editCourseData: async (req, res) => {
+        try {
+            const course = await Course.findOne({courseName: req.body.courseName});
+            if (course) {
+                await Course.findOneAndUpdate({courseName: req.body.courseName},{
+                    courseName: req.body.newCourseName
+                },{useFindAndModify: false});
+                await CourseSubjects.findOneAndUpdate({course: req.body.courseName},{
+                    course: req.body.newCourseName
+                },{useFindAndModify: false});
+                res.status(200).send('Course with subjects updated successfully');
+            } else {
+                res.status(404).send(`There is no course with name ${req.body.courseName}`);
+            }
+
         } catch (err) {
             res.status(400).send(err);
         }
