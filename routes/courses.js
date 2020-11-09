@@ -13,6 +13,6 @@ router.post('/addCourseWithSubjects', verifyToken, coursesController.addCourseWi
 
 router.get('/findCourseWithSubjects/:courseName', coursesController.findCourseWithSubjects);
 
-router.patch('/editCourseData', verifyToken, coursesController.editCourseData);
+router.put('/editCourseData', verifyToken, coursesController.editCourseData);
 
 module.exports = router;
