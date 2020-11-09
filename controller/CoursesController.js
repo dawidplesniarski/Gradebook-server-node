@@ -91,12 +91,16 @@ const CoursesController = {
         try {
             const foundCourse = await CourseSubjects.findOne({course: req.body.courseName});
             if (foundCourse) {
-                const index = req.body.semester;
-                await CourseSubjects.updateOne({course: req.body.courseName},{
-                        $push: {[`semesters.${index}`] : req.body.newSubject}
-                    }
-                );
-                res.status(200).send('Subject added successfully');
+                if(foundCourse.semesters[req.body.semester].includes(req.body.newSubject)) {
+                    res.status(409).send(`Subject with name ${req.body.newSubject} already exists!`)
+                } else {
+                    const index = req.body.semester;
+                    await CourseSubjects.updateOne({course: req.body.courseName},{
+                            $push: {[`semesters.${index}`] : req.body.newSubject}
+                        }
+                    );
+                    res.status(200).send('Subject added successfully');
+                }
             } else {
                 res.status(404).send(`Course with name ${req.body.courseName} not exists`)
             }
