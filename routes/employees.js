@@ -25,4 +25,6 @@ router.put('/addEmployeeSubject', verifyToken, employeeController.addEmployeeSub
 
 router.put('/deleteEmployeeSubject', verifyToken, employeeController.deleteEmployeeSubject);
 
+router.put('/changePassword/:employeeId', verifyToken, employeeController.changeEmployeePassword);
+
 module.exports = router;

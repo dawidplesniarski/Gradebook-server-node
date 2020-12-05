@@ -190,6 +190,28 @@ const EmployeeController = {
             res.status(400).send({message: err});
         }
     },
+    changeEmployeePassword: async (req, res) => {
+        const salt = await bcrypt.genSalt(10);
+        const hashedNewPassword = await bcrypt.hash(req.body.newPassword, salt);
+        const employee = await Employee.findById(req.params.employeeId);
+
+        const validPassword = await bcrypt.compare(
+            req.body.password,
+            employee.password
+        )
+
+        if(validPassword && req.body.newPassword === req.body.confirmPassword) {
+            employee.update({password: hashedNewPassword}, (err) => {
+                if (err) {
+                    res.status(403).send({message: 'Cannot update password'});
+                } else {
+                    res.status(200).send({message: 'Password updated successfully'})
+                }
+            })
+        } else {
+            res.status(403).send({message: 'Your account password is not correct or new passwords not matches'});
+        }
+    }
 };
 
 module.exports = EmployeeController;
