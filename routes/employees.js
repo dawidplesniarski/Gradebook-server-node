@@ -27,4 +27,6 @@ router.put('/deleteEmployeeSubject', verifyToken, employeeController.deleteEmplo
 
 router.put('/changePassword/:employeeId', verifyToken, employeeController.changeEmployeePassword);
 
+router.put('/changeImage', verifyToken, employeeController.updateEmployeeImage);
+
 module.exports = router;

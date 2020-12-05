@@ -211,6 +211,14 @@ const EmployeeController = {
         } else {
             res.status(403).send({message: 'Your account password is not correct or new passwords not matches'});
         }
+    },
+    updateEmployeeImage: async (req, res) => {
+        try {
+            await Employee.findOneAndUpdate({_id: req.body.employeeId}, {imageUrl: req.body.imageUrl});
+            res.status(200).send('Image url updated successfully');
+        } catch (err) {
+            res.status(404).send('Cannot update image url');
+        }
     }
 };
 
